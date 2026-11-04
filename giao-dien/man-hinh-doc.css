@@ -1,0 +1,95 @@
+/* ==========================================================
+   MÀN HÌNH DỌC & RESPONSIVE (LANDSCAPE)
+   ========================================================== */
+@media (orientation: landscape) and (max-height: 500px) {
+    header { padding: 2px 8px !important; padding-top: calc(2px + var(--safe-top)) !important; }
+    #luckBadge { display: none !important; }
+    #cloudStatusBar { padding: 0 8px !important; font-size: 9px !important; height: 16px !important; line-height: 16px !important; }
+    header > div:first-child > div:first-child > div:first-child { width: 32px !important; height: 32px !important; }
+    #charAvatarIcon { font-size: 14px !important; }
+    #charNameDisplay { font-size: 10px !important; }
+    #charRankBadge { font-size: 8px !important; padding: 0 4px !important; }
+    header .text-\[10px\] { font-size: 9px !important; }
+    header > div:nth-child(2) { padding: 3px 10px !important; }
+    #userBalanceDisplay { font-size: 14px !important; }
+    header > div:nth-child(2) .w-6 { width: 18px !important; height: 18px !important; }
+    header > div:last-child button { padding: 4px 8px !important; font-size: 10px !important; }
+    header > div:last-child button span { display: none !important; }
+    #authBtnText { display: none !important; }
+    #roomSimulationView { padding: 4px !important; }
+    #roomObj_vehicle, #roomObj_fan, #roomObj_laptop, #roomObj_cooker { transform: scale(0.55) !important; transform-origin: bottom center; }
+    .char-stage { transform: scale(0.55) !important; transform-origin: bottom center; height: 200px !important; }
+    #roomSimulationView > div:first-child { display: none !important; }
+    #roomSimulationView > div:nth-child(2) { height: 200px !important; margin: 0 !important; }
+    #roomSimulationView > div:last-child { padding-top: 2px !important; }
+    #roomSimulationView > div:last-child button { padding: 6px 10px !important; font-size: 10px !important; }
+    .fixed.bottom-4.right-4 button > div { padding: 6px 10px !important; }
+    .fixed.bottom-4.right-4 .w-9 { width: 28px !important; height: 28px !important; }
+    .fixed.bottom-4.right-4 .text-xs { font-size: 10px !important; }
+    .fixed.bottom-4.right-4 .text-\[10px\] { font-size: 9px !important; }
+
+    #taiXiuCasinoModal { padding: 10px !important; align-items: center !important; }
+    #taiXiuCasinoModal > div { max-width: 95vw !important; width: 95vw !important; max-height: 95dvh !important; height: auto !important; padding: 0 !important; display: flex; flex-direction: column; }
+    #taiXiuCasinoModal > div > button.absolute { top: -15px !important; right: -15px !important; transform: scale(0.8); }
+    #taiXiuCasinoModal > div > div:first-child { display: none !important; }
+    #taiXiuCasinoModal .gold-plate-border { border-radius: 20px !important; padding: 4px !important; height: auto !important; max-height: calc(95dvh - 20px); display: flex; flex-direction: column; }
+    #taiXiuCasinoModal .wood-inner-panel { border-radius: 16px !important; padding: 10px !important; height: 100%; display: flex; flex-direction: column; overflow-y: auto; }
+    #taiXiuCasinoModal .wood-inner-panel > div:first-child { padding-bottom: 6px !important; margin-bottom: 8px !important; }
+    #roadHistoryDots { gap: 4px !important; }
+    #roadHistoryDots > div { width: 20px !important; height: 20px !important; font-size: 10px !important; }
+    #taiXiuCasinoModal .grid.lg\:grid-cols-12 { display: grid !important; grid-template-columns: 1fr 160px 1fr !important; gap: 10px !important; align-items: stretch; margin-bottom: 8px; }
+    #taiXiuCasinoModal .lg\:col-span-5 { padding: 8px !important; border-radius: 16px !important; display: flex; flex-direction: column; justify-content: center; }
+    #taiXiuCasinoModal .lg\:col-span-5 .text-4xl, #taiXiuCasinoModal .lg\:col-span-5 .sm\:text-5xl { font-size: 32px !important; margin: 4px 0 !important; }
+    #taiXiuCasinoModal .lg\:col-span-5 > div:nth-child(3) { padding: 6px !important; margin: 6px 0 !important; }
+    #taiXiuCasinoModal #taiPoolNumber, #taiXiuCasinoModal #xiuPoolNumber { font-size: 16px !important; }
+    #taiXiuCasinoModal .lg\:col-span-2 > div:first-child { width: 140px !important; height: 140px !important; }
+    #diceCluster { padding: 6px !important; gap: 6px !important; }
+    .dice-3d { width: 32px !important; height: 32px !important; padding: 4px !important; }
+    .dice-3d .pip { width: 6px !important; height: 6px !important; }
+    .dice-1 .pip { width: 10px !important; height: 10px !important; }
+    #bowlStatus { font-size: 10px !important; }
+    #countdownTimer { font-size: 24px !important; }
+    #bowlCover > div:first-child { width: 32px !important; height: 12px !important; }
+    #resultPlate { margin-top: 4px !important; }
+    #resultPlate .px-4 { padding: 4px 10px !important; }
+    #resultSummaryText { font-size: 14px !important; }
+    #refundNoticeText { font-size: 10px !important; }
+    #taiXiuCasinoModal .mt-6 { margin-top: 8px !important; padding-top: 8px !important; flex-direction: row !important; flex-wrap: wrap !important; gap: 6px !important; }
+    .chip-item { width: 36px !important; height: 36px !important; font-size: 10px !important; }
+    #taiXiuCasinoModal .mt-6 button.w-11 { width: 36px !important; height: 36px !important; font-size: 9px !important; }
+    #taiXiuCasinoModal .mt-6 button.px-3 { padding: 6px 10px !important; font-size: 10px !important; }
+    #confirmBetBtn { padding: 8px 16px !important; font-size: 13px !important; border-radius: 14px !important; }
+    #activeChipLabel { font-size: 12px !important; }
+    #liveChatSidebar { width: 240px !important; top: 8px !important; }
+    #chatMessageList { height: 180px !important; }
+    #authModal > div { padding: 12px !important; max-height: 92dvh; overflow-y: auto; }
+    #wardrobeModal > div, #garageModal > div { max-height: 92dvh !important; padding: 10px !important; }
+    #phoneBackdrop { padding: 4px !important; }
+    #phoneBackdrop > button.absolute { top: 8px !important; right: 8px !important; width: 32px !important; height: 32px !important; font-size: 12px !important; }
+    .iphone-frame { max-width: 600px !important; width: 90vw !important; height: 90dvh !important; border-radius: 24px !important; }
+    #phoneHomeScreen { padding: 10px !important; }
+    #phoneHomeScreen > div:first-child > div:first-child { padding: 8px !important; margin-bottom: 12px !important; }
+    #phoneHomeScreen .grid.grid-cols-4 { gap: 8px !important; }
+    #phoneHomeScreen .grid.grid-cols-4 .w-\[52px\] { width: 40px !important; height: 40px !important; }
+    #phoneHomeScreen .grid.grid-cols-4 i { font-size: 16px !important; }
+    #phoneHomeScreen .grid.grid-cols-4 span { font-size: 9px !important; }
+    #phoneHomeScreen .mt-6 { margin-top: 10px !important; }
+    #phoneHomeScreen .mt-6 > div { width: 36px !important; height: 36px !important; }
+    .custom-scrollable { padding-bottom: 8px; }
+    #policeCatchModal > div { max-height: 95dvh; overflow-y: auto; }
+}
+
+@media (orientation: landscape) and (min-height: 501px) and (max-height: 700px) {
+    .char-stage { transform: scale(0.75); transform-origin: bottom center; }
+    #roomSimulationView > div:nth-child(2) { height: 320px !important; }
+    .chip-item { width: 38px !important; height: 38px !important; }
+}
+
+#rotatePrompt { position: fixed; inset: 0; background: linear-gradient(135deg, #0a0603 0%, #1a0d04 50%, #080503 100%); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; color: #fff; font-family: 'Montserrat', sans-serif; }
+#rotatePrompt.show { display: flex !important; }
+#rotatePrompt .phone-icon { font-size: 64px; color: #d4af37; animation: rotatePhone 2s ease-in-out infinite; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(212,175,55,0.5)); }
+@keyframes rotatePhone { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(90deg); } }
+#rotatePrompt h2 { font-size: 18px; font-weight: 900; color: #f5d061; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+#rotatePrompt p { font-size: 13px; color: #ccc; line-height: 1.6; max-width: 280px; }
+#rotatePrompt .hint { margin-top: 16px; font-size: 11px; color: #999; padding: 8px 14px; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; }
+#rotatePrompt .hint i { color: #f5d061; margin-right: 4px; }

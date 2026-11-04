@@ -1,0 +1,27 @@
+/* ==========================================================
+   MENU, NÚT ĐIỆN THOẠI NỔI, DRAG & DROP
+   ========================================================== */
+#floatingPhoneBtn {
+    touch-action: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    transition: filter 0.2s;
+}
+
+#floatingPhoneBtn.dragging {
+    filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.9));
+}
+
+#floatingPhoneBtn.dragging button {
+    transform: scale(1.08);
+    cursor: grabbing !important;
+}
+
+#floatingPhoneBtn.dragging button > div {
+    pointer-events: none;
+}
+
+#floatingPhoneBtn.snapping {
+    transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}

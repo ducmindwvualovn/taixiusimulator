@@ -1,0 +1,7 @@
+/* ==========================================================
+   PHÒNG TRỌ (BACKGROUND THEO CẤP ĐỘ)
+   ========================================================== */
+.room-slum { background: radial-gradient(circle at 50% 35%, #2d2218 0%, #150f09 65%, #080503 100%); border-bottom: 24px solid #140d07; }
+.room-apartment { background: radial-gradient(circle at 50% 30%, #202b38 0%, #111822 65%, #070b10 100%); border-bottom: 24px solid #141c24; }
+.room-mansion { background: radial-gradient(circle at 50% 25%, #422a10 0%, #1e1307 65%, #0a0602 100%); border-bottom: 24px solid #2d1b08; }
+.room-palace { background: radial-gradient(circle at 50% 20%, #4c1143 0%, #240520 65%, #0e010c 100%); border-bottom: 24px solid #2c0628; }
