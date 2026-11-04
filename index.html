@@ -2,7 +2,9 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no,email=no,address=no">
     <title>Sinh Viên Nghèo Đổi Đời - Tài Xỉu Hoàng Gia Pro (Địa Ngục Bản)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -15,7 +17,41 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
-        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        /* ==========================================================
+           CHỐNG BÔI ĐEN + CHỐNG ZOOM (FIX MẠNH)
+           ========================================================== */
+        html, body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            overscroll-behavior: none;
+        }
+
+        * {
+            box-sizing: border-box;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Cho phép chọn text trong ô input/textarea để chat & đăng nhập */
+        input, textarea, [contenteditable="true"] {
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            touch-action: auto;
+        }
+
+        /* Chặn kéo ảnh */
+        img {
+            -webkit-user-drag: none;
+            user-drag: none;
+            -webkit-touch-callout: none;
+        }
+
         body { font-family: 'Montserrat', sans-serif; background: #080503; color: #fff; min-height: 100vh; overflow-x: hidden; }
 
         .room-slum { background: radial-gradient(circle at 50% 35%, #2d2218 0%, #150f09 65%, #080503 100%); border-bottom: 24px solid #140d07; }
@@ -226,6 +262,72 @@
     </style>
 </head>
 <body class="flex flex-col justify-between min-h-screen">
+
+    <!-- ==========================================================
+         SCRIPT CHỐNG ZOOM & BÔI ĐEN (CHẠY SỚM)
+         ========================================================== -->
+    <script>
+        (function preventZoomAndSelect() {
+            // Chặn pinch zoom (2 ngón) trên iOS Safari
+            document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
+            document.addEventListener('gesturechange', e => e.preventDefault(), { passive: false });
+            document.addEventListener('gestureend', e => e.preventDefault(), { passive: false });
+
+            // Chặn double-tap zoom (iOS + Android)
+            let lastTouch = 0;
+            document.addEventListener('touchend', function (e) {
+                const now = Date.now();
+                if (now - lastTouch <= 300) { e.preventDefault(); }
+                lastTouch = now;
+            }, { passive: false });
+
+            // Chặn Ctrl + wheel zoom (desktop)
+            document.addEventListener('wheel', function (e) {
+                if (e.ctrlKey) e.preventDefault();
+            }, { passive: false });
+
+            // Chặn Ctrl + / - / 0
+            document.addEventListener('keydown', function (e) {
+                if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            });
+
+            // Chặn double-click bôi đen (desktop)
+            document.addEventListener('mousedown', function (e) {
+                if (e.detail > 1) e.preventDefault();
+            });
+
+            // Chặn bôi đen bằng kéo chuột/ngón tay (trừ input/textarea)
+            document.addEventListener('selectstart', function (e) {
+                if (!e.target.closest('input, textarea, [contenteditable="true"]')) {
+                    e.preventDefault();
+                }
+            });
+
+            // Chặn menu chuột phải (trừ input/textarea)
+            document.addEventListener('contextmenu', e => {
+                if (!e.target.closest('input, textarea, [contenteditable="true"]')) {
+                    e.preventDefault();
+                }
+            });
+
+            // Chặn copy / cut
+            document.addEventListener('copy', e => {
+                if (!e.target.closest('input, textarea, [contenteditable="true"]')) {
+                    e.preventDefault();
+                }
+            });
+            document.addEventListener('cut', e => {
+                if (!e.target.closest('input, textarea, [contenteditable="true"]')) {
+                    e.preventDefault();
+                }
+            });
+
+            // Chặn kéo ảnh
+            document.addEventListener('dragstart', e => e.preventDefault());
+        })();
+    </script>
 
     <div id="rotatePrompt">
         <i class="fa-solid fa-mobile-screen-button phone-icon"></i>
@@ -1116,12 +1218,17 @@
             return Math.random() < catchRate;
         }
 
+        // ===== FIX CHỐNG CLICK SPAM =====
+        let isProcessingBet = false;
         function placeBet() {
+            if (isProcessingBet) return;
             if (sessionStatus !== 'BETTING') return;
             if (!selectedDoor) return showFloatingText('CHỌN CỬA ĐI BẠN!', '#f39c12');
             if (currentChip <= 0 || balance < currentChip) return showFloatingText('KHÔNG ĐỦ TIỀN!', '#e74c3c');
-            if (checkPoliceIntervention(currentChip)) { openPoliceCatchModal(currentChip, selectedDoor); return; }
+            if (checkPoliceIntervention(currentChip)) { isProcessingBet = true; openPoliceCatchModal(currentChip, selectedDoor); setTimeout(() => isProcessingBet = false, 400); return; }
+            isProcessingBet = true;
             executeBet(currentChip, selectedDoor);
+            setTimeout(() => isProcessingBet = false, 400);
         }
 
         function executeBet(amount, door) {
@@ -1206,7 +1313,6 @@
             let d1 = Math.floor(Math.random() * 6) + 1; let d2 = Math.floor(Math.random() * 6) + 1; let d3 = Math.floor(Math.random() * 6) + 1;
             let total = d1 + d2 + d3; let outcome = (total >= 11 && total <= 18) ? 'TAI' : 'XIU';
             if (winStreak >= 3) { outcome = (outcome === 'TAI') ? 'XIU' : 'TAI'; winStreak = 0; }
-            // MAY MẮN TÀI SẢN (KHÔNG ảnh hưởng tool)
             if (totalLuck > 0 && (myTaiBet > 0 || myXiuBet > 0)) {
                 const luckyRoll = (Math.random() * 100) < (totalLuck * 0.15);
                 if (luckyRoll) { const wantedDoor = myTaiBet > myXiuBet ? 'TAI' : 'XIU'; outcome = wantedDoor; }
@@ -1583,7 +1689,7 @@
         function escapeHtml(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 
         // ==========================================
-        // FLOATING PHONE BUTTON - DRAG & DROP
+        // FLOATING PHONE BUTTON - DRAG & DROP (FIXED)
         // ==========================================
         (function initFloatingPhoneDrag() {
             const btn = document.getElementById('floatingPhoneBtn');
@@ -1600,17 +1706,19 @@
                         btn.style.right = 'auto';
                         btn.style.bottom = 'auto';
                     }
-                } catch(e) {}
+                } catch (e) {}
             }
 
             let isDragging = false;
             let hasMoved = false;
             let startX = 0, startY = 0;
             let offsetX = 0, offsetY = 0;
-            const DRAG_THRESHOLD = 6;
+            let lastTouchTime = 0;
+            const DRAG_THRESHOLD = 8;
 
             function getPoint(e) {
                 if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                if (e.changedTouches && e.changedTouches[0]) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
                 return { x: e.clientX, y: e.clientY };
             }
 
@@ -1618,27 +1726,39 @@
                 const rect = btn.getBoundingClientRect();
                 const p = getPoint(e);
                 startX = p.x; startY = p.y;
-                offsetX = p.x - rect.left; offsetY = p.y - rect.top;
-                hasMoved = false; isDragging = true;
+                offsetX = p.x - rect.left;
+                offsetY = p.y - rect.top;
+                hasMoved = false;
+                isDragging = true;
                 btn.style.left = rect.left + 'px';
                 btn.style.top = rect.top + 'px';
                 btn.style.right = 'auto';
                 btn.style.bottom = 'auto';
-                if (e.type === 'touchstart' && e.cancelable) e.preventDefault();
             }
 
             function onDragMove(e) {
                 if (!isDragging) return;
                 const p = getPoint(e);
-                const dx = p.x - startX; const dy = p.y - startY;
-                if (!hasMoved && Math.abs(dx) + Math.abs(dy) > DRAG_THRESHOLD) { hasMoved = true; btn.classList.add('dragging'); }
+                const dx = p.x - startX;
+                const dy = p.y - startY;
+
+                if (!hasMoved && Math.abs(dx) + Math.abs(dy) > DRAG_THRESHOLD) {
+                    hasMoved = true;
+                    btn.classList.add('dragging');
+                }
                 if (!hasMoved) return;
-                const btnW = btn.offsetWidth; const btnH = btn.offsetHeight;
-                let newLeft = p.x - offsetX; let newTop = p.y - offsetY;
+
+                const btnW = btn.offsetWidth;
+                const btnH = btn.offsetHeight;
+                let newLeft = p.x - offsetX;
+                let newTop = p.y - offsetY;
+
                 newLeft = Math.max(8, Math.min(window.innerWidth - btnW - 8, newLeft));
                 newTop = Math.max(8, Math.min(window.innerHeight - btnH - 8, newTop));
+
                 btn.style.left = newLeft + 'px';
                 btn.style.top = newTop + 'px';
+
                 if (e.cancelable) e.preventDefault();
             }
 
@@ -1646,16 +1766,29 @@
                 if (!isDragging) return;
                 isDragging = false;
                 btn.classList.remove('dragging');
+
                 if (hasMoved) {
                     const rect = btn.getBoundingClientRect();
-                    localStorage.setItem('sx_phone_btn_pos', JSON.stringify({ x: Math.round(rect.left), y: Math.round(rect.top) }));
-                    const preventClick = (ev) => { ev.stopPropagation(); ev.preventDefault(); btn.removeEventListener('click', preventClick, true); };
+                    localStorage.setItem('sx_phone_btn_pos', JSON.stringify({
+                        x: Math.round(rect.left),
+                        y: Math.round(rect.top)
+                    }));
+                    lastTouchTime = Date.now();
+
+                    const preventClick = (ev) => {
+                        ev.stopPropagation();
+                        ev.preventDefault();
+                        ev.stopImmediatePropagation();
+                    };
                     btn.addEventListener('click', preventClick, true);
-                    setTimeout(() => btn.removeEventListener('click', preventClick, true), 50);
+                    setTimeout(() => {
+                        btn.removeEventListener('click', preventClick, true);
+                    }, 300);
                 }
                 hasMoved = false;
             }
 
+            // Chuột (desktop)
             btn.addEventListener('mousedown', (e) => {
                 if (e.button !== 0) return;
                 onDragStart(e);
@@ -1663,13 +1796,15 @@
                 document.addEventListener('mouseup', onDragEnd);
             });
 
+            // Touch (mobile)
             btn.addEventListener('touchstart', (e) => {
                 onDragStart(e);
                 document.addEventListener('touchmove', onDragMove, { passive: false });
                 document.addEventListener('touchend', onDragEnd);
                 document.addEventListener('touchcancel', onDragEnd);
-            }, { passive: false });
+            }, { passive: true });
 
+            // Cleanup
             const cleanup = () => {
                 document.removeEventListener('mousemove', onDragMove);
                 document.removeEventListener('mouseup', onDragEnd);
@@ -1681,39 +1816,42 @@
             window.addEventListener('touchend', cleanup);
             window.addEventListener('touchcancel', cleanup);
 
+            // Resize (xoay ngang) → giữ nút trong màn hình
             window.addEventListener('resize', () => {
+                if (btn.style.left === 'auto' || !btn.style.left) return;
                 const rect = btn.getBoundingClientRect();
-                let newLeft = rect.left; let newTop = rect.top;
-                const btnW = btn.offsetWidth; const btnH = btn.offsetHeight;
-                newLeft = Math.max(8, Math.min(window.innerWidth - btnW - 8, newLeft));
-                newTop = Math.max(8, Math.min(window.innerHeight - btnH - 8, newTop));
-                if (newLeft !== rect.left || newTop !== rect.top) {
-                    btn.style.left = newLeft + 'px';
-                    btn.style.top = newTop + 'px';
-                    btn.style.right = 'auto';
-                    btn.style.bottom = 'auto';
-                    localStorage.setItem('sx_phone_btn_pos', JSON.stringify({ x: Math.round(newLeft), y: Math.round(newTop) }));
-                }
+                const btnW = btn.offsetWidth;
+                const btnH = btn.offsetHeight;
+                let newLeft = Math.max(8, Math.min(window.innerWidth - btnW - 8, rect.left));
+                let newTop = Math.max(8, Math.min(window.innerHeight - btnH - 8, rect.top));
+                btn.style.left = newLeft + 'px';
+                btn.style.top = newTop + 'px';
+                localStorage.setItem('sx_phone_btn_pos', JSON.stringify({
+                    x: Math.round(newLeft), y: Math.round(newTop)
+                }));
             });
 
-            // Double-click để reset về góc phải dưới
+            // Double-tap / Double-click → reset về góc phải dưới
+            function resetBtnPosition() {
+                btn.style.left = 'auto';
+                btn.style.top = 'auto';
+                btn.style.right = '16px';
+                btn.style.bottom = '16px';
+                localStorage.removeItem('sx_phone_btn_pos');
+                if (typeof showFloatingText === 'function') {
+                    showFloatingText('📍 Đã reset vị trí nút!', '#3498db');
+                }
+            }
+
+            btn.addEventListener('dblclick', resetBtnPosition);
+
             let lastTap = 0;
-            btn.addEventListener('touchend', (e) => {
+            btn.addEventListener('touchend', () => {
                 const now = Date.now();
-                if (now - lastTap < 300 && !hasMoved) {
-                    btn.style.left = 'auto'; btn.style.top = 'auto';
-                    btn.style.right = '16px'; btn.style.bottom = '16px';
-                    localStorage.removeItem('sx_phone_btn_pos');
-                    if (typeof showFloatingText === 'function') showFloatingText('📍 Đã reset vị trí nút!', '#3498db');
+                if (!hasMoved && now - lastTap < 300 && now - lastTouchTime > 400) {
+                    resetBtnPosition();
                 }
                 lastTap = now;
-            });
-
-            btn.addEventListener('dblclick', () => {
-                btn.style.left = 'auto'; btn.style.top = 'auto';
-                btn.style.right = '16px'; btn.style.bottom = '16px';
-                localStorage.removeItem('sx_phone_btn_pos');
-                if (typeof showFloatingText === 'function') showFloatingText('📍 Đã reset vị trí nút!', '#3498db');
             });
         })();
     </script>
